@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>O-løb</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+   <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+   <nav class=" bg-light w-100">
+      <div class="container d-flex justify-content-between  flex-row fs-4">
+         <div class="w-50">
+            <a class="active text-decoration-none text-black" href="#O-Løb">O-Løb</a>
+         </div>
+         <div class="w-75 d-flex justify-content-between">
+            <a href="./index.html">1.Opret løb</a>
+            <a href="./post.html">2.Opret post</a>
+            <a href="./quizquestions.html">3.Opret spørsmål</a>
+            <a href="./seeruns.html">Se løb</a>
+            <a href="./startrun.html">Start Løb</a>
+         </div>
+      </div>
+   </nav>
+
+
+   <section id="app">
+      <main class="container-fluid d-flex flex-column justify-content-center align-items-center mt-4">
+
+         <h1>Opret Post</h1>
+         <div class="my-3 w-100 d-flex flex-row-reverse border-1 border-bottom">
+
+            <div class="w-50">
+               <h3>Vælg løb</h3>
+               <div class="mb-4 container-fluid bg-light p-3 rounded-3 overflowY-scroll max-h">
+                  <div v-if="ListOfRuns.length > 0">
+                     <div v-for="item in ListOfRuns" class="bg-primary text-white p-2 mb-3 rounded-4 shadow">
+                        <button v-on:click="connectRun(item)" class="border-0 bg-transparent text-white w-100">
+                           <div v-show="ListOfRuns.length >= 1" class="d-flex justify-content-between border-bottom mb-1 pb-1">
+                              <h4>Run Name:</h4>
+                              <h4>{{item.name}}</h4>
+                           </div>
+                           <div class="d-flex justify-content-between">
+                              <h5>Run type:</h5>
+                              <h5>{{item.runType}}</h5>
+                           </div>
+                        </button>
+                     </div>
+                  </div>
+                  <p v-if="ListOfRuns.length <= 0" class="py-1 m-0">* kunne ikke load løb</p>
+               </div>
+            </div>
+
+            <div class="w-50 px-3">
+               <h2>Valgt løb</h2>
+               <div class="bg-danger text-white py-2 px-4 mb-3 rounded-4 shadow">
+                  <div  class="d-flex justify-content-between border-bottom mb-2 pb-1">
+                     <h5>Run Name:</h5>
+                     <h5>{{selectedRunid.name}}</h5>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                     <h6>Run type:</h6>
+                     <h6>{{selectedRunid.runType}}</h6>
+                  </div>
+               </div>
+            </div>
+         </div>   
+
+         <!------    her slutter løb delen og post starter   ------->
+
+         <div class="container-fluid w-100 d-flex justify-content-between flex-row pt-2 px-0 pb-5">
+            
+            <div class="container-fluid w-50">
+               <h3>Lav post</h3>
+               <Form @submit.prevent.self class="">
+                  
+                  <!-- creat post -->
+                  <div class="w-100 d-flex flex-column text-white">
+                     <label for="Name">Name</label>
+                     <input v-model="post.Name" type="text" placeholder="Navn" class="mb-3">
+                     <label for="Name">Radius</label>
+                     <input v-model.number="post.Radius" type="number" placeholder="Radius" class="mb-3">
+                     <div class="d-flex justify-content-evenly flex-row-reverse mb-3">
+                        <div class="d-flex flex-column align-items-lg-center">
+                           <label for="Breddegrad">Brede grad (-180 - 180)</label>
+                           <span class="d-flex justify-content-center">
+                              <i class="bi bi-arrows p-2 fs-1"></i>
+                              <input v-model.number="post.GpsLatitude" type="number" placeholder="Breddegrad" class="mt-2 w-50">
+                           </span>
+                        </div>
+                        <div class="d-flex flex-column align-items-lg-center">
+                           <label for="Længde grad">Længde grad (-90 - 90)</label>
+                           <span class="d-flex justify-content-center">
+                              <i class="bi bi-arrows-vertical p-2 fs-1"></i>
+                              <input v-model.number="post.GpsLongitude" type="number" placeholder="Længde grad"  class="mt-2 w-50">
+                           </span>
+                        </div>
+                     </div>
+                     <button v-on:click="addPostToList()" class="btn btn-primary p-1 fs-5 mt-2">Lav Post</button>
+                  </div>
+               </Form>
+            </div>
+
+            <div class="w-50 d-flex flex-column">
+               <h3>Poster lavet</h3>
+
+               <div class="w-100 max-h overflowY-scroll mt-4 bg-light px-3 pt-3 pb-1 rounded-4" >
+                  <div v-for="item in addedPost" 
+                  v-if="addedPost.length > 0"
+                  class="mb-3 p-2 bg-info rounded text-white shadow d-flex justify-content-evenly flex-column">
+                     <div class="d-flex justify-content-between border-bottom border-white">
+                        <h4>{{item.Name}}</h4>
+                        <h4>Nr: {{item.SequenceNumber}}</h4>
+                     </div>
+                     <div class="container">
+                        <div class="d-flex justify-content-between flex-row-reverse mb-1">
+                           <div>
+                              <span><i class="bi bi-arrows fs-4"></i> Breddegrad: {{item.GpsLatitude}}</span>
+                           </div>
+                           <div>
+                              <span><i class="bi bi-arrows-vertical p-2 fs-4"></i>længegrad: {{item.GpsLongitude}}</span>
+                           </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                           <h5>Radius:</h5>
+                           <h5>{{item.Radius}} meter</h5>
+                        </div>
+                     </div>
+                  </div>
+                  <p v-if="addedPost.length < 1" class="p-0">*Du har ikke tilføjet nogen poster endnu</p>
+               </div>
+               <div class="d-flex justify-content-center p-1 mb-5 py-4">
+                  <button 
+                  v-on:click="PushPost()"
+                  class="btn btn-success btn-outline-light px-3 py-2 fw-bold fs-4 shadow w-75 mx-auto"
+                  >Tilføj poster til løb <i class="bi bi-send"></i></button>
+               </div>
+            </div>  
+         </div>
+      </main>
+   </section>
+
+
+<script src="./post.js"></script>
+</body>
+</html>

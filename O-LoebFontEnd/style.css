@@ -1,0 +1,105 @@
+
+
+nav a{
+  text-decoration: none;
+  color: black;
+  font-size: 22px;
+  font-weight: 200;
+}
+
+*{
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+  box-sizing: border-box;
+}
+
+a:hover{
+  transform:translate(0px, -3px) scale(1.1);
+  filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 2px 5px);
+}
+
+button:hover{
+  transform:translate(0px, -1px) scale(1.01);
+  filter: drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 5px);
+}
+
+.row{
+  min-height: 500px;
+}
+
+
+form button{
+  width: 50%;
+  margin: 0 auto;
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+}
+
+.addpostform{
+  position: fixed;
+  bottom: 50%;
+  right: 25%;
+  z-index: 10;
+  min-width: 50vw;
+}
+
+.overflowY-scroll{
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+div input ,div textarea, div select{
+  font-size: 20px;
+  padding: .8rem;
+  border-radius: .375rem;
+  border:none;
+  background: #fff;
+}
+
+input[type=radio]{
+  align-self: center;
+}
+
+.closeicon:hover{
+  transform:scale(1.03);
+  filter: drop-shadow(rgba(238, 17, 17, 0.3) 0px 0px 5px);
+}
+
+.max-h{
+  max-height: 40vh;
+}
+.max-h-lg{
+  max-height: 50vh;
+}
+
+body{
+  background-image: url(https://images.pexels.com/photos/340932/pexels-photo-340932.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
+  background-position:center;
+  background-size:cover;
+  backdrop-filter: blur(50px);
+  min-height: 100vh;
+  height: 100%;
+}
+
+.hover-box{
+  border-bottom: #fff solid 0px;
+}
+
+.hover-box:hover{
+  transform:translate(0px, -6%);
+  border-bottom: #fff solid 3px;
+  filter:drop-shadow( 0px 10px 50px rgba(255, 255, 255, 1));
+}
+
+.fliped{
+  transform: scaleX(-1);
+}
+
+.marker-border{
+  background: #474747;
+  border-radius: 40%;
+  width: 55px;
+  height: 55px;
+}
+
+.live-marker {
+  background-color: red;
+}
